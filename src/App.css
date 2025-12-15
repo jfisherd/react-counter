@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-#iCantStyleInLine, reducerInput {
+#buttons, #reducerInputContainer {
   display: flex;
   justify-content: center;
 }
