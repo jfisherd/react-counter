@@ -10,7 +10,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
 
     // countHistory.map((countInstance) => <li>{countInstance}</li>) // Keep around for reference. -JF 12/16/2025
     
-    // Make unique keys by adding to a string every time count or history updates?
+    // Make unique keys by adding to a string every time count or history updates? Too long...............
 
     const handleDecrement = () => {
         setCountHistory((prevCountHistory) => {
@@ -23,12 +23,12 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     }
 
     const handleIncrement = () => {
-        setCountHistory((prevCountHistory) => { // Irresponsible use of .push()
-            prevCountHistory.push(<li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count+stepValue}</strong></li>); // .push modifies an array then returns the length of the new array.
-            return prevCountHistory // Return the modified array
+        setCountHistory((prevCountHistory) => {
+            prevCountHistory= [...prevCountHistory, <li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count+stepValue}</strong></li>]; // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
+            return prevCountHistory 
         })
         setCount((prevCount) => {
-            return prevCount + stepValue
+            return prevCount + stepValue 
         })
     }
 
