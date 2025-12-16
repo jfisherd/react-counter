@@ -12,5 +12,15 @@
 
 li {
   list-style: none;
-  border: 1px solid red;
 }
+
+.decrementRecord {
+  border: 1px solid red;
+  background-color: aquamarine;
+}
+
+.incrementRecord {
+  border: 1px solid green; /* I hope you aren't colorblind because I use red and green for testing all the time sometimes. */
+  background-color: orange;
+}
+

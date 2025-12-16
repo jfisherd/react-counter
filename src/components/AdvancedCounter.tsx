@@ -14,28 +14,31 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const handleDecrement = () => {
         setCount((prevCount) => prevCount - stepValue)
         setCountHistory((prevCountHistory) => {
-            prevCountHistory.push(<li>A NEW RECORD</li>);
+            prevCountHistory.push(<li className="decrementRecord">({stepValue}) subtracted from Count ({ }) = { }</li>); // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
             return prevCountHistory
         })
     }
 
     const handleIncrement = () => {
-        setCount((prevCount) => prevCount + stepValue)
+        let prevCountToBePassed = 0
+        setCount((prevCount) => {
+            return prevCount + stepValue
+        })
+
         setCountHistory((prevCountHistory) => {
-            prevCountHistory.push(<li>A NEW RECORD</li>);
-            return prevCountHistory
+            prevCountHistory.push(<li className="incrementRecord">({stepValue}) added to Count ({ }) = { }</li>); // .push modifies an array then returns the length of the new array.
+            return prevCountHistory // The array must returned, not the array length
         })
     }
 
     const handleStepValueChange = () => {
-        setStepValue(Number(document.getElementById('stepInput').value))
+        setStepValue(Number(document.getElementById('stepInput').value)) // This somehow works despite the errors
         {/* Number() required, type guards do not change input string to a number */ }
     }
 
     const handleReset = () => { // Clear count history and reset count to 0
         setCount(0)
         setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>No count history</li>])
-
     }
 
     // 
