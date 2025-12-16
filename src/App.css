@@ -10,17 +10,17 @@
   justify-content: center;
 }
 
+
+
 li {
   list-style: none;
 }
 
-.decrementRecord {
-  border: 1px solid red;
-  background-color: aquamarine;
+.decrementRecord { /* Colors generated and selected from coolors.co */
+  background-color: #54426B;
 }
 
-.incrementRecord {
-  border: 1px solid green; /* I hope you aren't colorblind because I use red and green for testing all the time sometimes. */
-  background-color: orange;
+.incrementRecord { /* Colors generated and selected from coolors.co */
+  background-color: #623CEA;
 }
 
