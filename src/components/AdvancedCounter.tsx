@@ -1,11 +1,16 @@
 // import from index.ts
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 
 export const AdvancedCounter: React.FC = () => {
 
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
+    const [countHistory, setCountHistory] = useState<ReactNode[] | null>(null)
+    const [listCountHistory, setListCountHistory] =  useState<ReactNode[]>([<li>No count history</li>])
 
+
+    countHistory.map((countInstance) => <li>{countInstance}</li>)
+    
     {/* consider empty string case, division by 0, 0^0, undefined, bigInts, */ }
     // const [customFunction, setCustomFunction] = useState<string>("")
 
@@ -21,8 +26,11 @@ export const AdvancedCounter: React.FC = () => {
 
     const handleReset = () => {
         setCount(0)
+        setListCountHistory([<li>No count history</li>])
         {/*CLEAR COUNT HISTORY*/}
     }
+
+
 
     return (
         <>
@@ -38,12 +46,12 @@ export const AdvancedCounter: React.FC = () => {
                 {/*<button onClick={handleIteration}>*/} {/* handle reducer function */}
                     {/* Iterate f(x) */}
                 {/* </button>  */}
-                <button onClick={() => setCount(0)}> 
+                <button onClick={handleReset}> 
                     Reset Count
                 </button> {/* set current count to 0 */}
             </div>
             <label htmlFor="stepInput">Step size: </label> {/* Idea for label and stepInput id taken directly from Per Scholas' Lab 10.1 */}
-            <input id="stepInput" type="number" value={stepValue} onChange={handleStepValueChange}></input> {/* CHECK THE stepValue DISPLAYS CORRECTLY */}
+            <input id="stepInput" type="number" value={stepValue} onChange={handleStepValueChange}></input> 
             {/* <div id='reducerInputContainer'>
                 <label htmlFor='reducerInput'>f(x) = </label> */}
                 {/* <input id='reducerInput' type='text'></input> */} {/* Handle invalid inputs without breaking system */}
@@ -51,7 +59,7 @@ export const AdvancedCounter: React.FC = () => {
             </div> */}
             <div>!!! Changes Saved. !!!</div>
             <div>!!! Count History: !!!</div>
-            {/* <ul>{COUNTHISTORY}</ul> */}
+            <ul>{listCountHistory}</ul>
         </>
     )
 }
