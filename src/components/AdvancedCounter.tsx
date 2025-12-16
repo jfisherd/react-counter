@@ -1,60 +1,71 @@
 // import from index.ts
 import { useState, type ReactNode } from "react"
 
-export const AdvancedCounter: React.FC = ():ReactNode => {
+export const AdvancedCounter: React.FC = (): ReactNode => {
 
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
-    const [countHistory, setCountHistory] = useState<ReactNode[]>([<li>No count history</li>])
-    const [listCountHistory, setListCountHistory] =  useState<ReactNode[]>([<li>No count history</li>])
+    // UUID key for initial count history message generated with UUID V7 on https://www.uuidgenerator.net/
+    const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>No count history</li>])
 
 
+    // countHistory.map((countInstance) => <li>{countInstance}</li>)
 
+    const handleDecrement = () => {
+        setCount((prevCount) => prevCount - stepValue)
+        setCountHistory((prevCountHistory) => {
+            prevCountHistory.push(<li>A NEW RECORD</li>);
+            return prevCountHistory
+        })
+    }
 
-    // setListCountHistory(countHistory.map((countInstance) => <li>{countInstance}</li>)) // PUT THIS IN AN onChange SOMWHERE
-    
+    const handleIncrement = () => {
+        setCount((prevCount) => prevCount + stepValue)
+        setCountHistory((prevCountHistory) => {
+            prevCountHistory.push(<li>A NEW RECORD</li>);
+            return prevCountHistory
+        })
+    }
 
-
+    const handleChange = () => { // GUT THIS
+        setCountHistory((prevCountHistory) => prevCountHistory.push(<li></li>)) // <li key={UNIQUE_KEY}>{countInstance}</li>))
+    }
 
     const handleStepValueChange = () => {
         setStepValue(Number(document.getElementById('stepInput').value))
         {/* Number() required, type guards do not change input string to a number */ }
     }
 
-
-
-    const handleReset = () => {
+    const handleReset = () => { // Clear count history and reset count to 0
         setCount(0)
-        setCountHistory([<li>No count history</li>])
-            setListCountHistory(countHistory.map((countInstance) => <li>{countInstance}</li>))
-        // setListCountHistory([<li>No count history</li>])
-        // CLEAR COUNT HISTORY AND RESET COUNTER TO 0
-        // INFINITE LOOPS
+        setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>No count history</li>])
+
     }
 
+    // 
 
 
     return (
         <>
-            <h4>Advanced Counter</h4> 
-            <h2>Current Count: {count}</h2>
+            <h4>Advanced Counter</h4>
+            <h2 onChange={handleChange}>Current Count: {count}</h2>
             <div id='buttons'> {/* style={`display: flex; justify-content: center`}> NO IN-LINE STYLING?*/}
-                <button onClick={() => setCount((prevCount) => prevCount - stepValue)}>
+                <button onClick={handleDecrement}>
                     Decrement
                 </button>
-                <button onClick={() => setCount((prevCount) => prevCount + stepValue)}>
+                <button onClick={handleIncrement}>
                     Increment
                 </button>
-                <button onClick={handleReset}> 
+                <button onClick={handleReset}>
                     Reset Count
                 </button> {/* set current count to 0 */}
             </div>
             <label htmlFor="stepInput">Step size: </label> {/* Idea for label and stepInput id taken directly from Per Scholas' Lab 10.1 */}
-            <input id="stepInput" type="number" value={stepValue} onChange={handleStepValueChange}></input> 
+            <input id="stepInput" type="number" value={stepValue} onChange={handleStepValueChange}></input>
 
             <div>!!! Changes Saved. !!!</div>
             <div>!!! Count History: !!!</div>
-            <ul>{listCountHistory}</ul>
+            <ul>{countHistory}</ul>
         </>
     )
 }
