@@ -1,15 +1,17 @@
 // import from index.ts
 import { useState, type ReactNode } from "react"
 
-export const AdvancedCounter: React.FC = () => {
+export const AdvancedCounter: React.FC = ():ReactNode => {
 
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
-    const [countHistory, setCountHistory] = useState<ReactNode[] | null>(null)
+    const [countHistory, setCountHistory] = useState<ReactNode[]>([<li>No count history</li>])
     const [listCountHistory, setListCountHistory] =  useState<ReactNode[]>([<li>No count history</li>])
 
 
-    countHistory.map((countInstance) => <li>{countInstance}</li>)
+
+
+    setListCountHistory(countHistory.map((countInstance) => <li>{countInstance}</li>))
     
     {/* consider empty string case, division by 0, 0^0, undefined, bigInts, */ }
     // const [customFunction, setCustomFunction] = useState<string>("")
@@ -26,8 +28,9 @@ export const AdvancedCounter: React.FC = () => {
 
     const handleReset = () => {
         setCount(0)
+        setCountHistory([<li>No count history</li>])
         setListCountHistory([<li>No count history</li>])
-        {/*CLEAR COUNT HISTORY*/}
+        {/*CLEAR COUNT HISTORY AND RESET COUNTER TO 0*/}
     }
 
 
