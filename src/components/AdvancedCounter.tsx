@@ -27,10 +27,6 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         })
     }
 
-    const handleChange = () => { // GUT THIS
-        setCountHistory((prevCountHistory) => prevCountHistory.push(<li></li>)) // <li key={UNIQUE_KEY}>{countInstance}</li>))
-    }
-
     const handleStepValueChange = () => {
         setStepValue(Number(document.getElementById('stepInput').value))
         {/* Number() required, type guards do not change input string to a number */ }
@@ -48,7 +44,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     return (
         <>
             <h4>Advanced Counter</h4>
-            <h2 onChange={handleChange}>Current Count: {count}</h2>
+            <h2>Current Count: {count}</h2>
             <div id='buttons'> {/* style={`display: flex; justify-content: center`}> NO IN-LINE STYLING?*/}
                 <button onClick={handleDecrement}>
                     Decrement
