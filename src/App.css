@@ -1,16 +1,16 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: auto;
+  /* margin-top: 25px; */
+  /* padding: 2rem; */
   text-align: center;
 }
 
-#buttons, #reducerInputContainer {
+#buttons {
   display: flex;
   justify-content: center;
+  border-right: 10px;
 }
-
-
 
 li {
   list-style: none;

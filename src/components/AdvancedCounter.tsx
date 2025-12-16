@@ -9,32 +9,33 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
 
     // countHistory.map((countInstance) => <li>{countInstance}</li>) // Keep around for reference. -JF 12/16/2025
+    
+    // Make unique keys by adding to a string every time count or history updates?
 
     const handleDecrement = () => {
         setCountHistory((prevCountHistory) => {
-            prevCountHistory.push(<li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count-stepValue}</strong></li>); // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
-            return prevCountHistory
+            prevCountHistory= [...prevCountHistory, <li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count-stepValue}</strong></li>]; // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
+            return prevCountHistory 
         })
         setCount((prevCount) => {
-            return prevCount - stepValue
+            return prevCount - stepValue 
         })
     }
 
     const handleIncrement = () => {
-        setCountHistory((prevCountHistory) => {
+        setCountHistory((prevCountHistory) => { // Irresponsible use of .push()
             prevCountHistory.push(<li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count+stepValue}</strong></li>); // .push modifies an array then returns the length of the new array.
-            return prevCountHistory // The array must be returned, not the array length returned by .push()
+            return prevCountHistory // Return the modified array
         })
         setCount((prevCount) => {
             return prevCount + stepValue
         })
-
-
     }
 
     const handleStepValueChange = () => {
-        setStepValue(Number(document.getElementById('stepInput').value)) // This somehow works despite the errors
-        {/* Number() required, type guards do not change input string to a number? */ }
+        // Number() required, type guards do not change input string to a number?
+        setStepValue(Number(document.getElementById('stepInput').value)) // This somehow works despite the errors, .value is mandatory exactly where it is
+        
     }
 
     const handleReset = () => { // Clear count history and reset count to 0
@@ -42,14 +43,11 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
     }
 
-    // FIX THE CSS COLORS TO NOT BE PAINFUL
-
-
     return (
         <>
-            <h4>Advanced Counter</h4>
+            <h4><i>Advanced</i> Counter</h4>
             <h2>Current Count: {count}</h2>
-            <div id='buttons'> {/* style={`display: flex; justify-content: center`}> NO IN-LINE STYLING?*/}
+            <div id='buttons'> {/* style={{display: flex; justify-content: center}}> IN-LINE STYLING HAS TOO MANY ERRORS */}
                 <button onClick={handleDecrement}>
                     Decrement
                 </button>
