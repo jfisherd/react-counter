@@ -6,7 +6,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
     const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>]) // UUID V7 key generated from https://www.uuidgenerator.net/
-    const [countHistoryNumArray, setCountHistoryNumArray] = useState
+    const [countHistoryNumArray, setCountHistoryNumArray] = useState<number[]>([])
 
     // countHistory.map((countInstance) => <li>{countInstance}</li>) // Keep around for reference. -JF 12/16/2025
     // Make unique keys?
@@ -46,7 +46,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     // Make a useEffect to update history
     // Report to the user that changes have been saved
     useEffect(() => {
-        countHistoryNumArray = [...countHistoryNumArray, count]
+        setCountHistoryNumArray([...countHistoryNumArray, count])
         console.log(countHistoryNumArray)
         localStorage.setItem("countHistoryNumArray", JSON.stringify(countHistoryNumArray))
     }, [count])
