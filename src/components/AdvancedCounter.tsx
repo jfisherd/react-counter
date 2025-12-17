@@ -12,6 +12,10 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     // Make unique keys? 
     // Address the case for stepValue = 0, and increment/decrement is clicked. Log it in history or no, since count does not change
 
+    // Up-arrow isDown, raise stepValue by 1 every x milliseconds until Up-arrow isUp
+    // Only check the initial down press, then change stepValue until the key is registered as up
+    // Address up and down arrow conflict, either pick a priority (up, down, first pressed, last pressed) or change/render nothing. This complicates the simple isDown/isUp while loop
+
     const handleDecrement = () => {
         setCountHistory((prevCountHistory) => { // keys not referenced/needed? Render OK despite console error. 
             return [...prevCountHistory, <li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count - stepValue}</strong></li>] // AN INTERFACE WOULD GO NICELY HERE
@@ -42,6 +46,44 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         setCountHistoryNumArray([0])
     }
 
+    useEffect(() => { // Attach event listeners to the document to handle up/down arrow keys
+
+        let intervalId: number | undefined // A positive integer that uniquely identifies the interval timer
+        // Consider the possibility a second intervalId is needed to handle both key's being pressed, or disable the possibility
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.repeat) return // prevents the incrementation from "running away" by disabling any new setInterval()'s until the 'keyup' event fires
+
+            if (event.key === 'ArrowUp') {
+                setStepValue(prevStepValue => prevStepValue + 1) // When the document "hears" the event that the ArrowUp key is down, stepValue increments and then once every 200 milliseconds
+                intervalId = window.setInterval(() => {
+                    setStepValue(prev => prev + 1)
+                }, 200)
+            } else if (event.key === 'ArrowDown') {
+                setStepValue(prevStepValue => prevStepValue - 1)
+                intervalId = window.setInterval(() => {
+                    setStepValue(prev => prev - 1)
+                }, 200)
+            }
+        }
+
+        const handleKeyUp = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { // When either ArrowUp or ArrowDown is lifted, disable the auto-incrementing interval
+                clearInterval(intervalId);
+                intervalId = undefined;
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown) // add the listeners to the document itself
+        document.addEventListener('keyup', handleKeyUp)
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown) // remove the listeners in useEffect clean-up
+            document.removeEventListener('keyup', handleKeyUp)
+        }
+
+    }, [])
+
     // Make a useEffect to update history
     // Report to the user that changes have been saved
     useEffect(() => {
@@ -55,12 +97,11 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         // Problem 2: stale referencing, does not update local storage with most current count value despite dependency, 
         // exploring solutions by reordering setState function calls,
         // trying to avoid variable like "let updateThisInSetState1AndPassToSetState2",
-        // may need to move the stale value problem away from useEffect and into handleIncrement/Decrement,
-        // or handle handleIncrement/Decrement more gracefully
-        // that's what I meant, you rubber duck
+        // A source hints that my stale value is caused by asynchronous behavior, and I think I should await the localStorage.Set().
 
 
-        const saveChangeAlert = document.getElementById('saveChangeAlert')
+        // Animation spams if button is spammed
+        const saveChangeAlert = document.getElementById('saveChangeAlert') // Save changes alert "animation"
         saveChangeAlert.innerHTML = 'Local storage saved!'
         for (let delay = 0; delay <= 1200;) { // could've been a while loop
             setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage saved...' }, delay += 300)
@@ -69,7 +110,6 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         // setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage up to date.' }, 2800)
         setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage is stale by 1 value every time until a certain someone fixes this.' }, 2800)
 
-        
 
         // Old setTimeout structure, keep chain for reference
         // setTimeout(() => {     
