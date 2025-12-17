@@ -1,41 +1,41 @@
 // import from index.ts
-import { useState, type ReactNode } from "react"
+import { useState, useEffect, type ReactNode } from "react"
 
 export const AdvancedCounter: React.FC = (): ReactNode => {
 
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
-    // UUID key for initial count history message generated with UUID V7 on https://www.uuidgenerator.net/
-    const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
+    const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>]) // UUID V7 key generated from https://www.uuidgenerator.net/
+    const [countHistoryNumArray, setCountHistoryNumArray] = useState
 
     // countHistory.map((countInstance) => <li>{countInstance}</li>) // Keep around for reference. -JF 12/16/2025
-    
-    // Make unique keys by adding to a string every time count or history updates? Too long...............
+    // Make unique keys?
+    // Consider an array recording count values using the spread operator
+    // Address the case for stepValue = 0, and increment/decrement is clicked. Log it in history or no, since count does not change
 
     const handleDecrement = () => {
-        setCountHistory((prevCountHistory) => {
-            prevCountHistory= [...prevCountHistory, <li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count-stepValue}</strong></li>]; // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
-            return prevCountHistory 
+        setCountHistory((prevCountHistory) => { // keys not needed? Render OK despite console error. 
+            prevCountHistory = [...prevCountHistory, <li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count - stepValue}</strong></li>];
+            return prevCountHistory
         })
         setCount((prevCount) => {
-            return prevCount - stepValue 
+            return prevCount - stepValue
         })
     }
 
     const handleIncrement = () => {
-        setCountHistory((prevCountHistory) => {
-            prevCountHistory= [...prevCountHistory, <li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count+stepValue}</strong></li>]; // keys not needed? Render OK. Console only noted keyless <li> elements on one occassion. JF 12/15/2025
-            return prevCountHistory 
+        setCountHistory((prevCountHistory) => { // keys not needed? Render OK despite console error. 
+            prevCountHistory = [...prevCountHistory, <li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count + stepValue}</strong></li>];
+            return prevCountHistory
         })
         setCount((prevCount) => {
-            return prevCount + stepValue 
+            return prevCount + stepValue
         })
     }
 
     const handleStepValueChange = () => {
         // Number() required, type guards do not change input string to a number?
         setStepValue(Number(document.getElementById('stepInput').value)) // This somehow works despite the errors, .value is mandatory exactly where it is
-        
     }
 
     const handleReset = () => { // Clear count history and reset count to 0
@@ -43,10 +43,18 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
     }
 
+    // Make a useEffect to update history
+    // Report to the user that changes have been saved
+    useEffect(() => {
+        countHistoryNumArray = [...countHistoryNumArray, count]
+        console.log(countHistoryNumArray)
+        localStorage.setItem("countHistoryNumArray", JSON.stringify(countHistoryNumArray))
+    }, [count])
+
     return (
         <>
             <h4><i>Advanced</i> Counter</h4>
-            <h2>Current Count: {count}</h2>
+            <h2>Current Count: <strong>{count}</strong></h2>
             <div id='buttons'> {/* style={{display: flex; justify-content: center}}> IN-LINE STYLING HAS TOO MANY ERRORS */}
                 <button onClick={handleDecrement}>
                     Decrement
