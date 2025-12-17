@@ -19,13 +19,10 @@ Clicking the Reset sets the count back to 0 and clear the count history<br>
 
 <br>
 
-Audio files were sources from Wikimedia at https://commons.wikimedia.org/wiki/File:Example_Shepard_Tones.ogg
+<!-- Audio files were sources from Wikimedia at https://commons.wikimedia.org/wiki/File:Example_Shepard_Tones.ogg -->
 <br>
 
 // code comments and subsequent reflections
 <br>
 
-> Iterate f(x)
-
-// about Iterate f(x)
 
