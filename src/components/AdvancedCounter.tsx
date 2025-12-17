@@ -6,7 +6,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const [count, setCount] = useState<number>(0)
     const [stepValue, setStepValue] = useState<number>(1)
     const [countHistory, setCountHistory] = useState<ReactNode[]>([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>]) // UUID V7 key generated from https://www.uuidgenerator.net/
-    const [countHistoryNumArray, setCountHistoryNumArray] = useState<number[]>([])
+    const [countHistoryNumArray, setCountHistoryNumArray] = useState<number[]>([0])
 
     // countHistory.map((countInstance) => <li>{countInstance}</li>) // Keep around for reference. -JF 12/16/2025
     // Make unique keys?
@@ -14,23 +14,25 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     // Address the case for stepValue = 0, and increment/decrement is clicked. Log it in history or no, since count does not change
 
     const handleDecrement = () => {
+        setCount((prevCount) => {
+            return prevCount - stepValue
+        })
         setCountHistory((prevCountHistory) => { // keys not needed? Render OK despite console error. 
             prevCountHistory = [...prevCountHistory, <li className="decrementRecord">({stepValue}) subtracted from Count ({count}) = <strong>{count - stepValue}</strong></li>];
             return prevCountHistory
         })
-        setCount((prevCount) => {
-            return prevCount - stepValue
-        })
+
     }
 
     const handleIncrement = () => {
+        setCount((prevCount) => {
+            return prevCount + stepValue
+        })
         setCountHistory((prevCountHistory) => { // keys not needed? Render OK despite console error. 
             prevCountHistory = [...prevCountHistory, <li className="incrementRecord">({stepValue}) added to Count ({count}) = <strong>{count + stepValue}</strong></li>];
             return prevCountHistory
         })
-        setCount((prevCount) => {
-            return prevCount + stepValue
-        })
+
     }
 
     const handleStepValueChange = () => {
@@ -41,7 +43,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const handleReset = () => { // Clear count history and reset count to 0
         setCount(0)
         setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
-        setCountHistoryNumArray([])
+        setCountHistoryNumArray([0])
     }
 
     // Make a useEffect to update history
@@ -50,6 +52,11 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         setCountHistoryNumArray([...countHistoryNumArray, count])
         console.log(countHistoryNumArray)
         localStorage.setItem("countHistoryNumArray", JSON.stringify(countHistoryNumArray))
+
+        const saveChangeAlert = document.getElementById('saveChangeAlert')
+        saveChangeAlert.innerHTML = 'A CHANGE HAS BEEN SAVED TO LOCAL STORAGE'
+        setTimeout(()=>{saveChangeAlert.innerHTML = ' '}, 1000)
+
     }, [count])
 
     return (
@@ -69,7 +76,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
             </div>
             <label htmlFor="stepInput">Step size: </label> {/* Idea for label and stepInput id taken directly from Per Scholas' Lab 10.1 */}
             <input id="stepInput" type="number" value={stepValue} onChange={handleStepValueChange}></input>
-            <div>!!! Changes Saved. !!!</div>
+            <div id='saveChangeAlert'></div> {/* Informs the user a value was saved to local storage */}
             <ul>{countHistory}</ul>
         </>
     )
