@@ -55,11 +55,13 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
             if (event.repeat) return // prevents the incrementation from "running away" by disabling any new setInterval()'s until the 'keyup' event fires
 
             if (event.key === 'ArrowUp') {
+                event.preventDefault()
                 setStepValue(prevStepValue => prevStepValue + 1) // When the document "hears" the event that the ArrowUp key is down, stepValue increments and then once every 200 milliseconds
                 intervalId = window.setInterval(() => {
                     setStepValue(prev => prev + 1)
                 }, 200)
             } else if (event.key === 'ArrowDown') {
+                event.preventDefault()
                 setStepValue(prevStepValue => prevStepValue - 1)
                 intervalId = window.setInterval(() => {
                     setStepValue(prev => prev - 1)
