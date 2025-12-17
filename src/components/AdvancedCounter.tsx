@@ -41,6 +41,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     const handleReset = () => { // Clear count history and reset count to 0
         setCount(0)
         setCountHistory([<li key={'019b2503-007d-74f3-a6f4-c19b6a898321'}>Count History:</li>])
+        setCountHistoryNumArray([])
     }
 
     // Make a useEffect to update history
