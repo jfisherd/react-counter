@@ -47,6 +47,10 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
     useEffect(() => {
         setCountHistoryNumArray([...countHistoryNumArray, count])
         console.log(countHistoryNumArray)
+    }, [count]) // ADDRESS THE FACT THIS RUNS ON INITIALIZATION
+
+    useEffect(() => {
+
         // Problem 1: logs the initial [0] twice. SOLVED BY INITIALIZING ARRAY AS EMPTY
         // Problem 2: stale referencing, does not update local storage with most current count value despite dependency, 
         // exploring solutions by reordering setState function calls,
@@ -54,18 +58,21 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         // may need to move the stale value problem away from useEffect and into handleIncrement/Decrement,
         // or handle handleIncrement/Decrement more gracefully
         // that's what I meant, you rubber duck
-        localStorage.setItem("countHistoryNumArray", JSON.stringify(countHistoryNumArray))
+
 
         const saveChangeAlert = document.getElementById('saveChangeAlert')
         saveChangeAlert.innerHTML = 'Local storage saved!'
         for (let delay = 0; delay <= 1200;) { // could've been a while loop
-            setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage saved.' }, delay += 300)
-            setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage saved!' }, delay += 300)
+            setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage saved...' }, delay += 300)
+            setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage saved!!!' }, delay += 300)
         }
         // setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage up to date.' }, 2800)
         setTimeout(() => { saveChangeAlert.innerHTML = 'Local storage is stale by 1 value every time until a certain someone fixes this.' }, 2800)
 
-        // setTimeout(() => {                                                  // Old setTimeout structure, keep chain for reference
+        
+
+        // Old setTimeout structure, keep chain for reference
+        // setTimeout(() => {     
         //     saveChangeAlert.innerHTML = 'ITERATE ME LIKE YOU MEAN IT'
         //     setTimeout(() => {
         //         saveChangeAlert.innerHTML = 'A CHANGE HAS BEEN SAVED TO LOCAL STORAGE'
@@ -75,7 +82,7 @@ export const AdvancedCounter: React.FC = (): ReactNode => {
         //     }, 1000)
         // }, 1000)
 
-    }, [count])
+    }, [countHistoryNumArray]) // ADDRESS THE FACT THIS RUNS ON INITIALIZATION
 
     return (
         <>
